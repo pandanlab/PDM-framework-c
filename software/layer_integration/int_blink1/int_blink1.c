@@ -6,7 +6,7 @@ void blink_config(){
 
 void blink_led(){
     pc13_on();
-    delay(1000);
+    delay(100);
     pc13_off();
-    delay(1000);
+    delay(100);
 }

@@ -1,0 +1,4 @@
+{
+    "compiler" : "arm-none-eabi-gcc",
+    "cpu_ar": "cortex-m3"
+}

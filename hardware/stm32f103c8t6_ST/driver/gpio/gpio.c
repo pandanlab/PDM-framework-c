@@ -1,15 +1,9 @@
 #include "gpio.h"
 
 void pinMode(GPIO_Types *gpio, uint8_t pin, uint8_t mode, uint8_t cnf) {
-    uint8_t position;
-    if(pin<8) {
-        position = pin *4;
-        gpio->CRL = (gpio->CRL & ~(0x0F << position)) | ((mode | (cnf << 2)) << position);
-    }
-    else {
-        position = (pin-8) *4;
-        gpio->CRH = (gpio->CRH & ~(0x0F << position)) | ((mode | (cnf << 2)) << position);
-    }
+    uint8_t position = pin *4;
+    if(pin<8) gpio->CRL = (gpio->CRL & ~(0x0F << position)) | ((mode | (cnf << 2)) << position);
+    else gpio->CRH = (gpio->CRH & ~(0x0F << position)) | ((mode | (cnf << 2)) << position);
 }
 
 void digitalWritePin(GPIO_Types *gpio, uint8_t pin, uint8_t value) {

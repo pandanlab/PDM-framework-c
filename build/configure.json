@@ -1,4 +1,13 @@
 {
     "compiler" : "arm-none-eabi-gcc",
-    "cpu_ar": "cortex-m3"
+    "cpu_architecture": "cortex-m3",
+    
+    "hardware": "stm32f103c8t6",
+    "linkerfile": "linker_file.ld",
+    "startupfile": "startup_file.c",
+
+    "hex_file":"on",
+    "bin_file":"off",
+    "map_file":"off",
+    "asm_file":"on"
 }

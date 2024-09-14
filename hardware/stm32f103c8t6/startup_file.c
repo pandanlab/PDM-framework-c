@@ -3,14 +3,11 @@
 #define SRAM_START          0x20000000U
 #define SRAM_SIZE           (20 * 1024)
 #define SRAM_END            (SRAM_START + SRAM_SIZE)
-
 #define STACK_START         SRAM_END
 
 // Function prototypes for interrupt handlers
 void Reset_Handler(void) __attribute__((noreturn));
 void Default_Handler(void) __attribute__((weak));
-
-// Interrupt handler function prototypes
 void NMI_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void HardFault_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void MemManage_Handler(void) __attribute__((weak, alias("Default_Handler")));

@@ -24,21 +24,50 @@ DIR_SRC = os.path.dirname(FILEDIR)
 DIR_OBJ  = os.path.join(DIR_SRC,"build","obj")
 
 #readConfigure_Json
-CONFIG_FILE_PATH = os.path.join(FILEDIR, "configure.json")
+CONFIG_FILE_PATH = "build/configure.json"
 with open(CONFIG_FILE_PATH, 'r') as file:
     DATA = json.load(file)
 
-#configure Infomation    
-CPL      = DATA["compiler"]
 CPU_AR   = DATA["cpu_architecture"]
-FLAG_CPL = f"-c -mcpu={CPU_AR} -mthumb -std=gnu11 -O5"
+
+CP_C     = DATA["compiler_c"]
+CP_CPL   = DATA["compiler_c++"]
+CP_ASM   = DATA["compiler_asm"]
+OTP      = DATA["optimazation"]
+
+FLAG_C   = f"-mcpu={CPU_AR} -mthumb -c {OTP} "
+FLAG_CPL = f"-mcpu={CPU_AR} -mthumb -c {OTP} "
+FLAG_ASM = f"-mcpu={CPU_AR} -mthumb"
+
 LINKER   = f"hardware/{DATA["hardware"]}/{DATA["linkerfile"]}"
 STARTUP  = f"hardware/{DATA["hardware"]}/{DATA["startupfile"]}"
+MAIN     = DATA["main"] 
 
-#_____________EXECUTION________________________
+
 list_data = []
-list_header = []
 index = 0
+#_____________EXECUTION________________________
+def generate_C(data):
+    link_input = str(data).replace(".h",".c")
+    link_output = os.path.join(DIR_OBJ,f"{str(data).split("\\")[-1].split(".")[0]}.o")
+    line = f"{CP_C} {FLAG_C} {link_input} -o {link_output}"
+    run_command(line)
+    print(f"generating : {link_output}")
+
+def generate_CPL(data):
+    link_input = str(data).replace(".h",".cpp")
+    link_output = os.path.join(DIR_OBJ,f"{str(data).split("\\")[-1].split(".")[0]}.o")
+    line = f"{CP_CPL} {FLAG_CPL} {link_input} -o {link_output}"
+    run_command(line)
+    print(f"generating : {link_output}")
+
+def generate_S(data):
+    link_input = data
+    link_output = os.path.join(DIR_OBJ,f"{str(data).split("\\")[-1].split(".")[0]}.o")
+    line = f"{CP_ASM} {FLAG_ASM} {link_input} -o {link_output}"
+    print(line)
+    run_command(line)
+    print(f"generating : {link_output}")
 
 def execution_file(link):
     with open(link,"r", encoding='utf-8') as file:
@@ -53,27 +82,12 @@ def execution_file(link):
                     link = os.path.join(DIR_SRC,data)
                     list_data.append(link)
 
-def generate_C(data):
-    link_input = str(data).replace(".h",".c")
-    link_output = os.path.join(DIR_OBJ,f"{str(data).split("\\")[-1].split(".")[0]}.o")
-    line = f"{CPL} {FLAG_CPL} {link_input} -o {link_output}"
-    run_command(line)
-    print(f"generating : {link_output}")
-
-
-def generate_S(data):
-    link_input = data
-    link_output = os.path.join(DIR_OBJ,f"{str(data).split("\\")[-1].split(".")[0]}.o")
-    line = f"{CPL} -c {link_input} -o {link_output}"
-    run_command(line)
-    print(f"generating : {link_output}")
-
+# START
 delete_files()
-
 list_data.append(os.path.join(DIR_SRC,str(STARTUP).replace("/","\\")))
-list_data.append(os.path.join(DIR_SRC,"main.c"))
-sw = 0
+list_data.append(os.path.join(DIR_SRC,str(MAIN).replace("/","\\")))
 
+sw = 0
 while 1:
     lenght_data = len(list_data)
     if(index == lenght_data):
@@ -86,15 +100,22 @@ while 1:
         print(f"error {index+1} : {list_data[index]}\n")
         break
     index = index + 1
+unique_file_list = list(set(list_data))
+unique_file_list.sort()
+print("complete generate\n")
 
 if(sw == 1):
-    print("complete generate\n")
-    unique_file_list = list(set(list_data))
-    unique_file_list.sort()
     for data in unique_file_list:
         if("general" not in data):
-            if(".h" in data or ".c" in data):
+            if((".h" in data)):
+                if("hardware" in data):
+                    generate_C(data)
+                else:
+                    generate_C(data)
+            elif(".c" in data):
                 generate_C(data)
+            elif(".cpp" in data):
+                generate_CPL(data)
             elif(".s" in data):
                 generate_S(data)
 
@@ -103,10 +124,9 @@ if(sw == 1):
     files = []
     for data in os.listdir(dir):
         files.append(f"{dir}/{data}")
-        
-    run_command(f"arm-none-eabi-gcc -nostdlib -T {LINKER} -g -o build/output/program.elf {" ".join(files)}")
-    run_command("arm-none-eabi-size build/output/program.elf")
 
+    run_command(f"arm-none-eabi-gcc -nostdlib -T {LINKER} -g -o build/output/program.elf {" ".join(files)}")
+    run_command("arm-none-eabi-size build/output/program.elf")      
     if(DATA["hex_file"] == "on"): run_command("arm-none-eabi-objcopy -O ihex build/output/program.elf build/output/program.hex")
     if(DATA["bin_file"] == "on"): run_command("arm-none-eabi-objcopy -O binary build/output/program.elf build/output/program.bin")
     if(DATA["map_file"] == "on"): run_command("arm-none-eabi-objdump -x build/output/program.elf > build/output/program.map")

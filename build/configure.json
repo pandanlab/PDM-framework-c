@@ -1,6 +1,10 @@
 {
-    "compiler" : "arm-none-eabi-gcc",
+    "compiler_c" : "arm-none-eabi-gcc",
+    "compiler_c++" : "arm-none-eabi-g++",
+    "compiler_asm" : "arm-none-eabi-as",
+    "optimazation" : "-O5",
     "cpu_architecture": "cortex-m3",
+    "main": "src/main.c",
     
     "hardware": "stm32f103c8t6",
     "linkerfile": "linker_file.ld",
@@ -10,4 +14,5 @@
     "bin_file":"off",
     "map_file":"off",
     "asm_file":"on"
+
 }

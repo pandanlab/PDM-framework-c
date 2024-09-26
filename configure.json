@@ -4,8 +4,10 @@
     "compiler_asm" : "arm-none-eabi-as",
     "optimazation" : "-O5",
     "cpu_architecture": "cortex-m3",
-    "main": "src/main.c",
+    "std_c": "",
+    "std_c++": "",
     
+    "main": "main.c",
     "hardware": "stm32f103c8t6",
     "linkerfile": "linker_file.ld",
     "startupfile": "startup_file.c",
@@ -14,5 +16,4 @@
     "bin_file":"off",
     "map_file":"off",
     "asm_file":"on"
-
 }

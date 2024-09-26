@@ -2,8 +2,7 @@
 #define UNIT_BOOT_H
 
 #include <stdint.h>
-#define APPLICATION_ADDRESS 0x08001004;
 typedef void (*pFunction)(void);
-void jump_application(void);
+void jump_application(uint32_t address);
 
 #endif // UNIT_BOOT_H

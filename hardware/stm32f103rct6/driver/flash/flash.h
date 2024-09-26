@@ -19,8 +19,16 @@ typedef struct{
 
 void Flash_Unlock();
 void Flash_Lock();
-void Flash_EraseSector(uint32_t Sector);
-void Flash_ProgrameWord(uint32_t Address, uint16_t Data);
-uint32_t Flash_ReadWord(uint32_t Address);
+
+void Flash_eraseFlash(uint32_t Address);
+void Flash_writeFlash(uint32_t Address, uint16_t Data);
+
+void Flash_readByte(uint32_t Address);
+void Flash_readHaftword(uint32_t Address);
+void Flash_readWord(uint32_t Address);
+
+void Flash_writeByte(uint32_t Address, uint8_t Data);
+void Flash_writeHaftword(uint32_t Address, uint16_t Data);
+void Flash_writeWord(uint32_t Address, uint32_t Data);
 
 #endif

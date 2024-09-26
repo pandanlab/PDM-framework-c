@@ -2,8 +2,6 @@
 #define UART_H
 
 #include <stdint.h>
-#include "../../../../hardware/stm32f103c8t6/driver/gpio/gpio.h"
-#include "../../../../hardware/stm32f103c8t6/driver/rcc/rcc.h"
 
 typedef struct
 {
@@ -19,13 +17,10 @@ typedef struct
 #define USART1_BASEADDR   0x40013800
 #define USART1            ((UART_Types *) USART1_BASEADDR)
 
-void uart_initHardware(GPIO_Types * GPIO, uint8_t pin_TX, uint8_t pin_RX);
-void uart_initSoftware(UART_Types * USART);
-uint8_t uart_statusRead(UART_Types * USART);
-uint8_t uart_statusWrite(UART_Types * USART);
-void uart_resetWrite(UART_Types * USART);
-void uart_resetRead(UART_Types * USART);
-void uart_write(UART_Types * USART,uint8_t data);
-uint8_t uart_read(UART_Types * USART);
+#define USART2_BASEADDR   0x40004400
+#define USART2            ((UART_Types *) USART1_BASEADDR)
+
+#define USART3_BASEADDR   0x40004800
+#define USART3            ((UART_Types *) USART1_BASEADDR)
 
 #endif // UART_H

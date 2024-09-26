@@ -89,8 +89,8 @@ uint32_t vectors[] __attribute__((section(".isr_vector"))) = {
     0,                                  // Reserved
     0,                                  // Reserved
     0,                                  // Reserved
-    (uint32_t)&SVCall_Handler,             // SVCall handler
-    (uint32_t)&DebugMonitor_Handler,        // Debug Monitor handler
+    (uint32_t)&SVCall_Handler,          // SVCall handler
+    (uint32_t)&DebugMonitor_Handler,    // Debug Monitor handler
     0,                                  // Reserved
     (uint32_t)&PendSV_Handler,          // PendSV handler
     (uint32_t)&SysTick_Handler,         // SysTick handler
@@ -155,8 +155,6 @@ uint32_t vectors[] __attribute__((section(".isr_vector"))) = {
     (uint32_t)&DMA2_Channel3_IRQHandler,// DMA2 Channel 3
     (uint32_t)&DMA2_Channel4_5_IRQHandler,// DMA2 Channel 4 and Channel 5
 };
-
-// (uint32_t)&ADC1_2_IRQHandler
 
 void Default_Handler(void){
     while (1);
